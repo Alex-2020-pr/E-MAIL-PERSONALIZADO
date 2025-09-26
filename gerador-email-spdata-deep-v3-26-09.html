@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPDATA - Sistema de Prospecção Completo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-dark: #004494;
+            --secondary: #28a745;
+            --secondary-dark: #218838;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --telefone: #6f42c1;
+            --tab-bg: #ffffff;
+            --tab-text: #343a40;
+            --tab-active-bg: #ffffff;
+            --tab-active-text: #0056b3;
+            --tab-hover-bg: #f1f5f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .version-info {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: white;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            background-color: var(--tab-bg);
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 200px;
+            justify-content: center;
+            color: var(--tab-text);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab:hover {
+            background-color: var(--tab-hover-bg);
+        }
+        
+        .tab.active {
+            background-color: var(--tab-active-bg);
+            color: var(--tab-active-text);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .tab-telefone.active {
+            border-bottom-color: var(--telefone);
+            color: var(--telefone);
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 500px;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+        
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-telefone {
+            background-color: var(--telefone);
+        }
+        
+        .btn-telefone:hover {
+            background-color: #5a2dab;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .email-preview {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .email-editor {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            margin-top: 20px;
+            min-height: 400px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .email-editor textarea {
+            min-height: 350px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .email-preview strong {
+            color: var(--primary);
+        }
+        
+        .history-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: white;
+            transition: transform 0.2s;
+        }
+        
+        .history-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .history-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .history-content {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .history-details {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .history-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            position: relative;
+            min-width: 250px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .search-box input {
+            padding-left: 40px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .filter-btn-telefone.active {
+            background-color: var(--telefone);
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card-telefone {
+            border-left-color: var(--telefone);
+            background: linear-gradient(135deg, #f3e5f5, #e8f5e8);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading i {
+            font-size: 2rem;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .research-results {
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--info);
+        }
+        
+        .research-results h4 {
+            color: var(--info);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-telefone {
+            background-color: #e2e3f5;
+            color: #3d2c7a;
+        }
+        
+        .tipo-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .tipo-email {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tipo-telefone {
+            background-color: var(--telefone);
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .ai-suggestion {
+            background-color: #f0f8ff;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .ai-suggestion h4 {
+            color: #17a2b8;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .toggle-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-btn {
+            background-color: #e9ecef;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .toggle-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                justify-content: center;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .toggle-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-hospital-alt"></i>
+                    <div>
+                        <h1>SPDATA - Prospecção Completa</h1>
+                        <span>37 anos de expertise em tecnologia para saúde</span>
+                        <div class="version-info">Versão 2.1 - Gerado em 15/10/2023 14:30 (Horário de Brasília)</div>
+                    </div>
+                </div>
+                <div>
+                    <span><i class="fas fa-user-tie"></i> Gerente Comercial: Alexandre da Silva</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('criar-email')">
+                <i class="fas fa-envelope"></i> Criar E-mail
+            </button>
+            <button class="tab tab-telefone" onclick="openTab('registro-ligacao')">
+                <i class="fas fa-phone"></i> Registrar Ligação
+            </button>
+            <button class="tab" onclick="openTab('historico')">
+                <i class="fas fa-history"></i> Histórico
+            </button>
+            <button class="tab" onclick="openTab('configuracoes')">
+                <i class="fas fa-cog"></i> Configurações
+            </button>
+        </div>
+        
+        <div id="criar-email" class="tab-content active">
+            <h2><i class="fas fa-edit"></i> Criar E-mail de Prospecção</h2>
+            
+            <div class="info-card">
+                <p><i class="fas fa-info-circle"></i> Preencha os dados da instituição para gerar um e-mail personalizado. O sistema tentará pesquisar informações adicionais automaticamente.</p>
+            </div>
+            
+            <form id="email-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="instituicao"><i class="fas fa-hospital"></i> Nome da Instituição:</label>
+                        <input type="text" id="instituicao" required placeholder="Ex: Hospital Albert Einstein">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cidade"><i class="fas fa-map-marker-alt"></i> Cidade:</label>
+                        <input type="text" id="cidade" required placeholder="Ex: São Paulo">
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="gestor"><i class="fas fa-user-md"></i> Nome do Gestor:</label>
+                        <input type="text" id="gestor" placeholder="Ex: Dr. João Silva">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cargo"><i class="fas fa-briefcase"></i> Cargo do Gestor:</label>
+                        <select id="cargo">
+                            <option value="Diretor Clínico">Diretor Clínico</option>
+                            <option value="Gestor de TI">Gestor de TI</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Superintendente">Superintendente</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="porte"><i class="fas fa-bed"></i> Porte da Instituição:</label>
+                        <select id="porte">
+                            <option value="Pequeno">Pequeno (até 50 leitos)</option>
+                            <option value="Médio">Médio (50-150 leitos)</option>
+                            <option value="Grande">Grande (150+ leitos)</option>
+                            <option value="Não informado">Não sei/Não informado</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="especialidades"><i class="fas fa-stethoscope"></i> Especialidades (opcional):</label>
+                        <input type="text" id="especialidades" placeholder="Ex: Cardiologia, Oncologia, Pediatria...">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" onclick="pesquisarInstituicao()">
+                        <i class="fas fa-search"></i> Pesquisar Instituição
+                    </button>
+                </div>
+                
+                <div class="loading" id="loading-research">
+                    <i class="fas fa-spinner"></i>
+                    <p>Pesquisando informações sobre a instituição...</p>
+                </div>
+                
+                <div id="research-results"></div>
+                
+                <div class="form-group">
+                    <button type="button" onclick="gerarEmail()" id="btn-gerar-email" disabled>
+                        <i class="fas fa-magic"></i> Gerar E-mail Personalizado
+                    </button>
+                </div>
+            </form>
+            
+            <div id="email-preview-container" style="display: none;">
+                <h3><i class="fas fa-eye"></i> Prévia do E-mail:</h3>
+                
+                <div class="toggle-buttons">
+                    <button class="toggle-btn active" id="btn-preview" onclick="toggleEmailView('preview')">
+                        <i class="fas fa-eye"></i> Visualizar
+                    </button>
+                    <button class="toggle-btn" id="btn-edit" onclick="toggleEmailView('edit')">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                </div>
+                
+                <div class="email-preview" id="email-preview"></div>
+                
+                <div class="email-editor" id="email-editor" style="display: none;">
+                    <textarea id="email-editor-textarea"></textarea>
+                    <div class="actions" style="margin-top: 15px;">
+                        <button onclick="aplicarEdicaoEmail()">
+                            <i class="fas fa-check"></i> Aplicar Edições
+                        </button>
+                        <button class="btn-warning" onclick="toggleEmailView('preview')">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button onclick="copiarEmail()">
+                        <i class="fas fa-copy"></i> Copiar E-mail
+                    </button>
+                    <button class="btn-secondary" onclick="salvarEmail()">
+                        <i class="fas fa-save"></i> Salvar no Histórico
+                    </button>
+                    <button class="btn-warning" onclick="limparFormulario()">
+                        <i class="fas fa-broom"></i> Limpar Formulário
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="registro-ligacao" class="tab-content">
+            <h2><i class="fas fa-phone"></i> Registrar Tentativa de Ligação</h2>
+            
+            <div class="info-card info-card-telefone">
+                <p><i class="fas fa-info-circle"></i> Registre aqui as tentativas de contato telefônico realizadas.</p>
+            </div>
+            
+            <form id="telefone-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="telefone-instituicao"><i class="fas fa-hospital"></i> Nome da Instituição:</label>
+                        <input type="text" id="telefone-instituicao" required placeholder="Ex: Hospital Albert Einstein">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefone-cidade"><i class="fas fa-map-marker-alt"></i> Cidade:</label>
+                        <input type="text" id="telefone-cidade" required placeholder="Ex: São Paulo">
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="telefone-gestor"><i class="fas fa-user-md"></i> Nome do Gestor:</label>
+                        <input type="text" id="telefone-gestor" placeholder="Ex: Dr. João Silva">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefone-cargo"><i class="fas fa-briefcase"></i> Cargo do Gestor:</label>
+                        <select id="telefone-cargo">
+                            <option value="Diretor Clínico">Diretor Clínico</option>
+                            <option value="Gestor de TI">Gestor de TI</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Superintendente">Superintendente</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="telefone-numero"><i class="fas fa-phone"></i> Número de Telefone:</label>
+                        <input type="text" id="telefone-numero" placeholder="Ex: (11) 99999-9999">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefone-status"><i class="fas fa-info-circle"></i> Status da Ligação:</label>
+                        <select id="telefone-status">
+                            <option value="Atendeu">Atendeu</option>
+                            <option value="Não Atendeu">Não Atendeu</option>
+                            <option value="Caixa Postal">Caixa Postal</option>
+                            <option value="Número Errado">Número Errado</option>
+                            <option value="Agendou Reunião">Agendou Reunião</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone-observacoes"><i class="fas fa-sticky-note"></i> Observações:</label>
+                    <textarea id="telefone-observacoes" placeholder="Detalhes da conversa, próximos passos, etc."></textarea>
+                </div>
+                
+                <div class="actions">
+                    <button type="button" class="btn-telefone" onclick="salvarLigacao()">
+                        <i class="fas fa-save"></i> Salvar Registro de Ligação
+                    </button>
+                    <button type="button" class="btn-warning" onclick="limparFormularioTelefone()">
+                        <i class="fas fa-broom"></i> Limpar Formulário
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="historico" class="tab-content">
+            <h2><i class="fas fa-history"></i> Histórico de Contatos</h2>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Buscar por instituição, cidade ou gestor..." onkeyup="filtrarHistorico()">
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filtrarPorTipo('todos')">
+                        <i class="fas fa-list"></i> Todos
+                    </button>
+                    <button class="filter-btn" onclick="filtrarPorTipo('email')">
+                        <i class="fas fa-envelope"></i> E-mails
+                    </button>
+                    <button class="filter-btn filter-btn-telefone" onclick="filtrarPorTipo('telefone')">
+                        <i class="fas fa-phone"></i> Ligações
+                    </button>
+                </div>
+            </div>
+            
+            <div id="historico-lista">
+                <!-- Os itens do histórico serão inseridos aqui via JavaScript -->
+            </div>
+        </div>
+        
+        <div id="configuracoes" class="tab-content">
+            <h2><i class="fas fa-cog"></i> Configurações do Sistema</h2>
+            
+            <div class="info-card">
+                <p><i class="fas fa-info-circle"></i> Personalize as configurações do sistema de prospecção.</p>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nome-gerente"><i class="fas fa-signature"></i> Nome do Gerente Comercial:</label>
+                    <input type="text" id="nome-gerente" value="Alexandre da Silva">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email-gerente"><i class="fas fa-envelope"></i> E-mail do Gerente:</label>
+                    <input type="email" id="email-gerente" value="alexandre.silva@spdata.com.br">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="telefone-gerente"><i class="fas fa-phone"></i> Telefone do Gerente:</label>
+                    <input type="text" id="telefone-gerente" value="(11) XXXX-XXXX">
+                </div>
+                
+                <div class="form-group">
+                    <label for="link-apresentacao"><i class="fas fa-link"></i> Link da Apresentação:</label>
+                    <input type="text" id="link-apresentacao" value="[APRESENTAÇÃO-SPDATA-2025-ALE_compressed.pdf]">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="template-personalizado"><i class="fas fa-edit"></i> Template Personalizado do E-mail:</label>
+                <textarea id="template-personalizado" placeholder="Personalize o template padrão do e-mail..."></textarea>
+            </div>
+            
+            <div class="actions">
+                <button class="btn-secondary" onclick="salvarConfiguracoes()">
+                    <i class="fas fa-save"></i> Salvar Configurações
+                </button>
+                <button onclick="restaurarPadroes()">
+                    <i class="fas fa-undo"></i> Restaurar Padrões
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para visualização completa -->
+    <div class="modal" id="modal-visualizar">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes do Contato</h3>
+                <button class="modal-close" onclick="fecharModal()">&times;</button>
+            </div>
+            <div id="modal-conteudo"></div>
+        </div>
+    </div>
+
+    <script>
+        // Versão do sistema com data/hora do Brasil
+        const dataHoraBrasil = new Date().toLocaleString('pt-BR', { 
+            timeZone: 'America/Sao_Paulo',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Atualizar a versão no cabeçalho
+        document.querySelector('.version-info').textContent = `Versão 2.1 - Gerado em ${dataHoraBrasil} (Horário de Brasília)`;
+        
+        // Dados de exemplo para simular pesquisa
+        const instituicoesExemplo = {
+            "Hospital Albert Einstein": {
+                cidade: "São Paulo",
+                porte: "Grande",
+                leitos: 600,
+                especialidades: ["Cardiologia", "Oncologia", "Neurologia", "Ortopedia"],
+                descricao: "Referência em medicina de alta complexidade e pesquisa médica.",
+                tipo: "Hospital Privado"
+            },
+            "Hospital Sírio-Libanês": {
+                cidade: "São Paulo",
+                porte: "Grande",
+                leitos: 400,
+                especialidades: ["Oncologia", "Cardiologia", "Transplantes", "Pediatria"],
+                descricao: "Excelência em assistência médica, ensino e pesquisa.",
+                tipo: "Hospital Privado"
+            },
+            "Hospital das Clínicas": {
+                cidade: "São Paulo",
+                porte: "Grande",
+                leitos: 2000,
+                especialidades: ["Diversas", "Ensino", "Pesquisa"],
+                descricao: "Maior complexo hospitalar da América Latina, vinculado à USP.",
+                tipo: "Hospital Público"
+            },
+            "Hospital Moinhos de Vento": {
+                cidade: "Porto Alegre",
+                porte: "Médio",
+                leitos: 180,
+                especialidades: ["Cardiologia", "Oncologia", "Cirurgia Geral"],
+                descricao: "Hospital de excelência com foco em ensino e pesquisa.",
+                tipo: "Hospital Privado"
+            },
+            "UNIMED Pelotas": {
+                cidade: "Pelotas",
+                porte: "Médio",
+                leitos: 120,
+                especialidades: ["Atendimento Multiprofissional", "Medicina Preventiva"],
+                descricao: "Cooperativa médica com foco em qualidade no atendimento e eficiência operacional.",
+                tipo: "Cooperativa"
+            },
+            "Santa Casa de Misericórdia": {
+                cidade: "Porto Alegre",
+                porte: "Grande",
+                leitos: 500,
+                especialidades: ["Diversas", "Ensino", "Pesquisa"],
+                descricao: "Instituição filantrópica com tradição em atendimento humanizado.",
+                tipo: "Filantrópico"
+            }
+        };
+
+        // Variáveis globais
+        let filtroAtual = 'todos';
+        let termoPesquisa = '';
+        let emailAtual = '';
+
+        // Abas do sistema
+        function openTab(tabName) {
+            // Esconder todas as abas
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remover classe active de todas as abas
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Mostrar a aba selecionada
+            document.getElementById(tabName).classList.add('active');
+            
+            // Adicionar classe active à aba clicada
+            event.currentTarget.classList.add('active');
+            
+            // Se for a aba de histórico, carregar os dados
+            if (tabName === 'historico') {
+                carregarHistorico();
+            }
+            
+            // Se for a aba de configurações, carregar as configurações salvas
+            if (tabName === 'configuracoes') {
+                carregarConfiguracoes();
+            }
+        }
+        
+        // Pesquisar instituição (simulação)
+        function pesquisarInstituicao() {
+            const instituicao = document.getElementById('instituicao').value.trim();
+            const cidade = document.getElementById('cidade').value.trim();
+            
+            if (!instituicao || !cidade) {
+                alert('Por favor, preencha o nome da instituição e a cidade.');
+                return;
+            }
+            
+            // Mostrar loading
+            document.getElementById('loading-research').style.display = 'block';
+            document.getElementById('research-results').innerHTML = '';
+            
+            // Simular pesquisa com timeout
+            setTimeout(() => {
+                document.getElementById('loading-research').style.display = 'none';
+                
+                // Verificar se temos dados para esta instituição
+                let dadosInstituicao = null;
+                let nomeInstituicaoCorrespondente = '';
+                
+                // Procurar por correspondência (mais robusta)
+                for (const key in instituicoesExemplo) {
+                    // Verificar correspondência por nome e cidade
+                    const nomeCorresponde = key.toLowerCase().includes(instituicao.toLowerCase()) || 
+                                          instituicao.toLowerCase().includes(key.toLowerCase());
+                    
+                    const cidadeCorresponde = instituicoesExemplo[key].cidade.toLowerCase() === cidade.toLowerCase();
+                    
+                    if (nomeCorresponde && cidadeCorresponde) {
+                        dadosInstituicao = instituicoesExemplo[key];
+                        nomeInstituicaoCorrespondente = key;
+                        break;
+                    }
+                }
+                
+                // Se não encontrou com cidade exata, tentar apenas por nome
+                if (!dadosInstituicao) {
+                    for (const key in instituicoesExemplo) {
+                        if (key.toLowerCase().includes(instituicao.toLowerCase()) || 
+                            instituicao.toLowerCase().includes(key.toLowerCase())) {
+                            dadosInstituicao = instituicoesExemplo[key];
+                            nomeInstituicaoCorrespondente = key;
+                            break;
+                        }
+                    }
+                }
+                
+                let htmlResultados = '';
+                
+                if (dadosInstituicao) {
+                    htmlResultados = `
+                        <div class="research-results">
+                            <h4><i class="fas fa-check-circle"></i> Informações encontradas para ${nomeInstituicaoCorrespondente}</h4>
+                            <p><strong>Porte:</strong> ${dadosInstituicao.porte} <span class="status-badge status-success">Confirmado</span></p>
+                            <p><strong>Leitos:</strong> ${dadosInstituicao.leitos}</p>
+                            <p><strong>Especialidades:</strong> ${dadosInstituicao.especialidades.join(', ')}</p>
+                            <p><strong>Tipo:</strong> ${dadosInstituicao.tipo}</p>
+                            <p><strong>Descrição:</strong> ${dadosInstituicao.descricao}</p>
+                            <div class="ai-suggestion">
+                                <h4><i class="fas fa-robot"></i> Sugestão da IA</h4>
+                                <p>Com base nas características desta instituição, o e-mail será personalizado para destacar soluções específicas para ${dadosInstituicao.tipo.toLowerCase()}s de porte ${dadosInstituicao.porte.toLowerCase()}.</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Preencher automaticamente os campos
+                    document.getElementById('porte').value = dadosInstituicao.porte;
+                    document.getElementById('especialidades').value = dadosInstituicao.especialidades.join(', ');
+                    
+                    // Atualizar o nome da instituição para o nome correto encontrado
+                    document.getElementById('instituicao').value = nomeInstituicaoCorrespondente;
+                } else {
+                    htmlResultados = `
+                        <div class="research-results">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Informações limitadas</h4>
+                            <p>Não foram encontradas informações detalhadas para "${instituicao}" em ${cidade}.</p>
+                            <p>Você pode preencher os dados manualmente ou tentar uma pesquisa mais específica.</p>
+                            <div class="ai-suggestion">
+                                <h4><i class="fas fa-robot"></i> Sugestão da IA</h4>
+                                <p>O e-mail será gerado com um template genérico. Considere pesquisar informações adicionais sobre a instituição para personalizar melhor a mensagem.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('research-results').innerHTML = htmlResultados;
+                document.getElementById('btn-gerar-email').disabled = false;
+            }, 1500); // Simular tempo de pesquisa
+        }
+        
+        // Gerar e-mail personalizado com IA
+        function gerarEmail() {
+            const instituicao = document.getElementById('instituicao').value;
+            const cidade = document.getElementById('cidade').value;
+            const gestor = document.getElementById('gestor').value || 'Prezado(a) Gestor(a)';
+            const cargo = document.getElementById('cargo').value;
+            const porte = document.getElementById('porte').value;
+            const especialidades = document.getElementById('especialidades').value;
+            
+            if (!instituicao || !cidade) {
+                alert('Por favor, preencha pelo menos o nome da instituição e a cidade.');
+                return;
+            }
+            
+            // Obter configurações personalizadas
+            const config = obterConfiguracoes();
+            
+            // Simular IA para personalização do e-mail
+            const sugestaoIA = gerarSugestaoIA(instituicao, cidade, porte, especialidades);
+            
+            // Gerar texto do e-mail (formato melhorado com IA)
+            let emailTexto = `Assunto: Soluções em Gestão Hospitalar para ${instituicao} - SPDATA\n\n`;
+            emailTexto += `Prezado(a) ${gestor} e equipe de gestão da ${instituicao},\n\n`;
+            emailTexto += `Meu nome é ${config.nomeGerente}, gerente comercial da SPDATA, empresa com mais de 37 anos de experiência em tecnologia para gestão hospitalar.\n\n`;
+            emailTexto += `${sugestaoIA}\n\n`;
+            emailTexto += `Oferecemos um sistema de gestão hospitalar completo, que inclui:\n`;
+            emailTexto += `• Módulos clínicos, administrativos e financeiros totalmente integrados;\n`;
+            emailTexto += `• Prontuário eletrônico, faturamento TISS/TUSS e controle de estoque;\n`;
+            emailTexto += `• Business Intelligence (BI) para apoiar decisões estratégicas;\n`;
+            emailTexto += `• Conformidade com ANS e LGPD, assegurando segurança e adequação regulatória.\n\n`;
+            emailTexto += `📎 ${config.linkApresentacao}\n\n`;
+            emailTexto += `Seria um prazer agendar uma breve demonstração, sem compromisso, para mostrar como podemos contribuir para otimizar os processos e apoiar os objetivos da ${instituicao}.\n\n`;
+            emailTexto += `Qual seria o melhor dia e horário para conversarmos?\n\n`;
+            emailTexto += `Agradeço pela atenção e me coloco à disposição.\n\n`;
+            emailTexto += `Atenciosamente,\n`;
+            emailTexto += `${config.nomeGerente}\n`;
+            emailTexto += `Gerente Comercial - SPDATA\n`;
+            emailTexto += `E-mail: ${config.emailGerente}\n`;
+            emailTexto += `Telefone: ${config.telefoneGerente}\n`;
+            emailTexto += `Site: www.spdata.com.br`;
+            
+            // Salvar o e-mail atual para edição
+            emailAtual = emailTexto;
+            
+            // Exibir prévia do e-mail
+            document.getElementById('email-preview').textContent = emailTexto;
+            document.getElementById('email-preview-container').style.display = 'block';
+            
+            // Rolar para a prévia
+            document.getElementById('email-preview-container').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Simular IA para personalização do e-mail
+        function gerarSugestaoIA(instituicao, cidade, porte, especialidades) {
+            // Buscar informações da instituição nos dados de exemplo
+            let infoInstituicao = null;
+            for (const key in instituicoesExemplo) {
+                if (key.toLowerCase().includes(instituicao.toLowerCase()) || 
+                    instituicao.toLowerCase().includes(key.toLowerCase())) {
+                    infoInstituicao = instituicoesExemplo[key];
+                    break;
+                }
+            }
+            
+            // Gerar sugestão baseada nas características da instituição
+            if (infoInstituicao) {
+                const tipo = infoInstituicao.tipo;
+                const descricao = infoInstituicao.descricao;
+                
+                if (tipo === "Cooperativa") {
+                    return `Sabemos que cooperativas de saúde enfrentam o desafio de equilibrar qualidade no atendimento, eficiência operacional e conformidade regulatória. É exatamente nesse ponto que nossas soluções podem apoiar a ${instituicao}.`;
+                } else if (tipo === "Hospital Público") {
+                    return `Reconhecemos que hospitais públicos como a ${instituicao} lidam com demandas complexas de atendimento à população, exigindo eficiência na gestão de recursos e processos. Nossas soluções foram desenvolvidas para apoiar instituições públicas em seus desafios diários.`;
+                } else if (tipo === "Filantrópico") {
+                    return `Compreendemos que instituições filantrópicas como a ${instituicao} buscam equilibrar a missão humanitária com a sustentabilidade operacional. Nossas soluções podem ajudar a otimizar processos para que vocês possam focar no que realmente importa: o cuidado com os pacientes.`;
+                } else {
+                    return `Sabemos que instituições de saúde de porte ${porte.toLowerCase()} como a ${instituicao} enfrentam desafios específicos na gestão de processos clínicos e administrativos. É exatamente nesse ponto que nossas soluções podem fazer a diferença.`;
+                }
+            } else {
+                return `Sabemos que instituições de saúde como a ${instituicao} enfrentam o desafio de equilibrar qualidade no atendimento, eficiência operacional e conformidade regulatória. É exatamente nesse ponto que nossas soluções podem apoiar a ${instituicao}.`;
+            }
+        }
+        
+        // Alternar entre visualização e edição do e-mail
+        function toggleEmailView(modo) {
+            const btnPreview = document.getElementById('btn-preview');
+            const btnEdit = document.getElementById('btn-edit');
+            const preview = document.getElementById('email-preview');
+            const editor = document.getElementById('email-editor');
+            const textarea = document.getElementById('email-editor-textarea');
+            
+            if (modo === 'edit') {
+                btnPreview.classList.remove('active');
+                btnEdit.classList.add('active');
+                preview.style.display = 'none';
+                editor.style.display = 'block';
+                textarea.value = emailAtual;
+            } else {
+                btnPreview.classList.add('active');
+                btnEdit.classList.remove('active');
+                preview.style.display = 'block';
+                editor.style.display = 'none';
+                preview.textContent = emailAtual;
+            }
+        }
+        
+        // Aplicar edições ao e-mail
+        function aplicarEdicaoEmail() {
+            const textarea = document.getElementById('email-editor-textarea');
+            emailAtual = textarea.value;
+            toggleEmailView('preview');
+            alert('Edições aplicadas com sucesso!');
+        }
+        
+        // Copiar e-mail para a área de transferência
+        function copiarEmail() {
+            navigator.clipboard.writeText(emailAtual).then(() => {
+                alert('E-mail copiado para a área de transferência!');
+            }).catch(err => {
+                console.error('Erro ao copiar: ', err);
+                alert('Erro ao copiar o e-mail. Tente novamente.');
+            });
+        }
+        
+        // Salvar e-mail no histórico
+        function salvarEmail() {
+            const instituicao = document.getElementById('instituicao').value;
+            const cidade = document.getElementById('cidade').value;
+            const gestor = document.getElementById('gestor').value || 'Gestor(a)';
+            
+            if (!instituicao || !cidade) {
+                alert('Por favor, preencha os dados necessários antes de salvar.');
+                return;
+            }
+            
+            // Obter histórico atual
+            let historico = JSON.parse(localStorage.getItem('historicoProspeccao')) || [];
+            
+            // Adicionar novo item
+            const novoItem = {
+                id: Date.now(),
+                tipo: 'email',
+                instituicao: instituicao,
+                cidade: cidade,
+                gestor: gestor,
+                conteudo: emailAtual,
+                data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+            };
+            
+            historico.unshift(novoItem); // Adicionar no início
+            
+            // Salvar no localStorage
+            localStorage.setItem('historicoProspeccao', JSON.stringify(historico));
+            
+            alert('E-mail salvo no histórico com sucesso!');
+            
+            // Se estiver na aba de histórico, atualizar a lista
+            if (document.getElementById('historico').classList.contains('active')) {
+                carregarHistorico();
+            }
+        }
+        
+        // Salvar registro de ligação
+        function salvarLigacao() {
+            const instituicao = document.getElementById('telefone-instituicao').value;
+            const cidade = document.getElementById('telefone-cidade').value;
+            const gestor = document.getElementById('telefone-gestor').value || 'Gestor(a)';
+            const numero = document.getElementById('telefone-numero').value;
+            const status = document.getElementById('telefone-status').value;
+            const observacoes = document.getElementById('telefone-observacoes').value;
+            
+            if (!instituicao || !cidade) {
+                alert('Por favor, preencha pelo menos o nome da instituição e a cidade.');
+                return;
+            }
+            
+            // Obter histórico atual
+            let historico = JSON.parse(localStorage.getItem('historicoProspeccao')) || [];
+            
+            // Adicionar novo item
+            const novoItem = {
+                id: Date.now(),
+                tipo: 'telefone',
+                instituicao: instituicao,
+                cidade: cidade,
+                gestor: gestor,
+                numero: numero,
+                status: status,
+                observacoes: observacoes,
+                data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+            };
+            
+            historico.unshift(novoItem); // Adicionar no início
+            
+            // Salvar no localStorage
+            localStorage.setItem('historicoProspeccao', JSON.stringify(historico));
+            
+            alert('Registro de ligação salvo com sucesso!');
+            limparFormularioTelefone();
+            
+            // Se estiver na aba de histórico, atualizar a lista
+            if (document.getElementById('historico').classList.contains('active')) {
+                carregarHistorico();
+            }
+        }
+        
+        // Carregar histórico
+        function carregarHistorico() {
+            const historico = JSON.parse(localStorage.getItem('historicoProspeccao')) || [];
+            const lista = document.getElementById('historico-lista');
+            
+            if (historico.length === 0) {
+                lista.innerHTML = '<p>Nenhum registro encontrado no histórico.</p>';
+                return;
+            }
+            
+            // Filtrar histórico conforme filtros ativos
+            let historicoFiltrado = historico;
+            
+            if (filtroAtual !== 'todos') {
+                historicoFiltrado = historico.filter(item => item.tipo === filtroAtual);
+            }
+            
+            if (termoPesquisa) {
+                const termo = termoPesquisa.toLowerCase();
+                historicoFiltrado = historicoFiltrado.filter(item => 
+                    item.instituicao.toLowerCase().includes(termo) ||
+                    item.cidade.toLowerCase().includes(termo) ||
+                    (item.gestor && item.gestor.toLowerCase().includes(termo))
+                );
+            }
+            
+            if (historicoFiltrado.length === 0) {
+                lista.innerHTML = '<p>Nenhum registro encontrado com os filtros aplicados.</p>';
+                return;
+            }
+            
+            // Gerar HTML para cada item
+            let html = '';
+            
+            historicoFiltrado.forEach(item => {
+                const tipoBadge = item.tipo === 'email' ? 
+                    '<span class="tipo-badge tipo-email">E-mail</span>' : 
+                    '<span class="tipo-badge tipo-telefone">Ligação</span>';
+                
+                let statusBadge = '';
+                if (item.tipo === 'telefone') {
+                    const statusClass = item.status === 'Atendeu' || item.status === 'Agendou Reunião' ? 
+                        'status-success' : 
+                        (item.status === 'Não Atendeu' ? 'status-warning' : 'status-info');
+                    
+                    statusBadge = `<span class="status-badge ${statusClass}">${item.status}</span>`;
+                }
+                
+                html += `
+                    <div class="history-item">
+                        <div class="history-header">
+                            <h3>${item.instituicao} ${tipoBadge}</h3>
+                            <span class="history-date">${item.data}</span>
+                        </div>
+                        <p><strong>Cidade:</strong> ${item.cidade} | <strong>Gestor:</strong> ${item.gestor} ${statusBadge}</p>
+                        
+                        ${item.tipo === 'telefone' ? `
+                            <p><strong>Telefone:</strong> ${item.numero || 'Não informado'}</p>
+                            ${item.observacoes ? `<p><strong>Observações:</strong> ${item.observacoes}</p>` : ''}
+                        ` : `
+                            <div class="actions">
+                                <button onclick="visualizarEmail(${item.id})">
+                                    <i class="fas fa-eye"></i> Ver E-mail
+                                </button>
+                                <button onclick="copiarDoHistorico(${item.id})">
+                                    <i class="fas fa-copy"></i> Copiar
+                                </button>
+                            </div>
+                        `}
+                        
+                        <div class="actions">
+                            <button class="btn-danger" onclick="excluirItem(${item.id})">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            lista.innerHTML = html;
+        }
+        
+        // Visualizar e-mail do histórico
+        function visualizarEmail(id) {
+            const historico = JSON.parse(localStorage.getItem('historicoProspeccao')) || [];
+            const item = historico.find(i => i.id === id);
+            
+            if (item && item.tipo === 'email') {
+                document.getElementById('modal-conteudo').innerHTML = `
+                    <h4>E-mail para ${item.instituicao}</h4>
+                    <p><strong>Data:</strong> ${item.data}</p>
+                    <p><strong>Gestor:</strong> ${item.gestor}</p>
+                    <p><strong>Cidade:</strong> ${item.cidade}</p>
+                    <div class="email-preview" style="margin-top: 15px;">${item.conteudo}</div>
+                `;
+                document.getElementById('modal-visualizar').style.display = 'flex';
+            }
+        }
+        
+        // Copiar do histórico
+        function copiarDoHistorico(id) {
+            const historico = JSON.parse(localStorage.getItem('historicoProspeccao')) || [];
+            const item = historico.find(i => i.id === id);
+            
+            if (item) {
+                navigator.clipboard.writeText(item.conteudo).then(() => {
+                    alert('Conteúdo copiado para a área de transferência!');
+                }).catch(err => {
+                    console.error('Erro ao copiar: ', err);
+                    alert('Erro ao copiar o conteúdo. Tente novamente.');
+                });
+            }
+        }
+        
+        // Filtrar histórico por tipo
+        function filtrarPorTipo(tipo) {
+            filtroAtual = tipo;
+            
+            // Atualizar botões de filtro
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            
+            // Recarregar histórico
+            carregarHistorico();
+        }
+        
+        // Filtrar histórico por texto
+        function filtrarHistorico() {
+            termoPesquisa = document.getElementById('search-input').value;
+            carregarHistorico();
+        }
+        
+        // Excluir item do histórico
+        function excluirItem(id) {
+            if (confirm('Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.')) {
+                let historico = JSON.parse(localStorage.getItem('historicoProspeccao')) || [];
+                historico = historico.filter(item => item.id !== id);
+                
+                localStorage.setItem('historicoProspeccao', JSON.stringify(historico));
+                carregarHistorico();
+                
+                alert('Registro excluído com sucesso!');
+            }
+        }
+        
+        // Fechar modal
+        function fecharModal() {
+            document.getElementById('modal-visualizar').style.display = 'none';
+        }
+        
+        // Limpar formulário de e-mail
+        function limparFormulario() {
+            document.getElementById('email-form').reset();
+            document.getElementById('email-preview-container').style.display = 'none';
+            document.getElementById('research-results').innerHTML = '';
+            document.getElementById('btn-gerar-email').disabled = true;
+            emailAtual = '';
+        }
+        
+        // Limpar formulário de telefone
+        function limparFormularioTelefone() {
+            document.getElementById('telefone-form').reset();
+        }
+        
+        // Obter configurações salvas
+        function obterConfiguracoes() {
+            const configSalvas = JSON.parse(localStorage.getItem('configuracoesSPDATA')) || {};
+            
+            return {
+                nomeGerente: configSalvas.nomeGerente || 'Alexandre da Silva',
+                emailGerente: configSalvas.emailGerente || 'alexandre.silva@spdata.com.br',
+                telefoneGerente: configSalvas.telefoneGerente || '(11) XXXX-XXXX',
+                linkApresentacao: configSalvas.linkApresentacao || '[APRESENTAÇÃO-SPDATA-2025-ALE_compressed.pdf]',
+                templatePersonalizado: configSalvas.templatePersonalizado || ''
+            };
+        }
+        
+        // Carregar configurações na tela
+        function carregarConfiguracoes() {
+            const config = obterConfiguracoes();
+            
+            document.getElementById('nome-gerente').value = config.nomeGerente;
+            document.getElementById('email-gerente').value = config.emailGerente;
+            document.getElementById('telefone-gerente').value = config.telefoneGerente;
+            document.getElementById('link-apresentacao').value = config.linkApresentacao;
+            document.getElementById('template-personalizado').value = config.templatePersonalizado;
+        }
+        
+        // Salvar configurações
+        function salvarConfiguracoes() {
+            const config = {
+                nomeGerente: document.getElementById('nome-gerente').value,
+                emailGerente: document.getElementById('email-gerente').value,
+                telefoneGerente: document.getElementById('telefone-gerente').value,
+                linkApresentacao: document.getElementById('link-apresentacao').value,
+                templatePersonalizado: document.getElementById('template-personalizado').value
+            };
+            
+            localStorage.setItem('configuracoesSPDATA', JSON.stringify(config));
+            alert('Configurações salvas com sucesso!');
+        }
+        
+        // Restaurar configurações padrão
+        function restaurarPadroes() {
+            if (confirm('Tem certeza que deseja restaurar as configurações padrão? Suas personalizações serão perdidas.')) {
+                localStorage.removeItem('configuracoesSPDATA');
+                carregarConfiguracoes();
+                alert('Configurações padrão restauradas!');
+            }
+        }
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar histórico se estiver na aba correspondente
+            if (document.getElementById('historico').classList.contains('active')) {
+                carregarHistorico();
+            }
+            
+            // Carregar configurações se estiver na aba correspondente
+            if (document.getElementById('configuracoes').classList.contains('active')) {
+                carregarConfiguracoes();
+            }
+            
+            // Fechar modal ao clicar fora dele
+            window.onclick = function(event) {
+                const modal = document.getElementById('modal-visualizar');
+                if (event.target === modal) {
+                    fecharModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
